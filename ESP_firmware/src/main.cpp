@@ -11,8 +11,8 @@ const char *mqtt_server = "m9.wqtt.ru";
 const int mqtt_port = 15410;
 const char *mqtt_user = "u_18FD72";
 const char *mqtt_pass = "hVrYAptZ";
-const char *noKey = "1";
-const char *haveKey = "0";
+const char *hKey = "1";
+const char *nKey = "0";
 
 void callback(char *topic, const byte *payload, int length) {
     char message[5] = {0x00};
@@ -24,10 +24,12 @@ void callback(char *topic, const byte *payload, int length) {
     Serial.print(" => ");
     Serial.println(message);
 
-    if (String(topic) == "control/lock001") {
+    if (String(topic) == "control/1") {
         message[length] = 0x00;
         String str_msg = String(message);
+
         int isLock = str_msg.toInt();
+
         digitalWrite(13, isLock);
     }
 }
@@ -61,7 +63,7 @@ void setup() {
             Serial.println("Could not connect to MQTT server");
         }
     }
-    client.subscribe("control/lock001");
+    client.subscribe("control/1");
 }
 
 void loop() {
@@ -69,8 +71,8 @@ void loop() {
 
     if (client.connected()) {
         client.loop();
-        if (LockStatus == 0)client.publish("status/lock001", haveKey);
-        else client.publish("status/lock001", noKey);
+        if (LockStatus == 0)client.publish("status/1", hKey);
+        else client.publish("status/1", nKey);
     }
-    delay(300);
+    delay(1000);
 }

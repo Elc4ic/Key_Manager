@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+package service;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+//Id
+message Id {
+  int32 id = 1;
+}
+//Entity
+message Lock {
+  int32 id = 1;
+  int32 status = 2;
+}
+message User {
+  int64 id = 1;
+  string email = 2;
+  string name = 3;
+}
+
+message LoginRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  string access_token = 1;
+  string refresh_token = 2;
+}
+message CreateRequest {
+  User user = 1;
+  string password = 2;
+}
+
+message CreateResponse {
+  User user = 1;
+}
+
+message SearchRequest {
+  string search_keyword = 1;
+}
+
+message SearchResponse {
+  repeated User users = 1;
+}
+
+//Empty
+message Empty {
+}
+
+//Services
+service LockService {
+  rpc GetLockList(Empty) returns (stream Lock);
+  rpc Open(Id) returns (Empty);
+}
+service AuthService {
+  rpc Login (LoginRequest) returns (LoginResponse);
+}
+
+service UnauthorizedUserService {
+  rpc create(CreateRequest) returns (CreateResponse) {}
+}
+
+service UserService {
+  rpc search(SearchRequest) returns (SearchResponse) {}
+}
