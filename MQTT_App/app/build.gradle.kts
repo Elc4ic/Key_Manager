@@ -1,6 +1,9 @@
+import com.google.protobuf.gradle.id
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.protobuf") version "0.9.1"
 }
 
 android {
@@ -59,11 +62,14 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
-    implementation("org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.4")
-    implementation ("com.android.support:support-v4:34.x.x")
-    implementation ("androidx.work:work-runtime-ktx:2.9.0")
-    implementation(files("libs/serviceLibrary-release.aar"))
-    implementation ("com.jakewharton.timber:timber:4.7.1")
+
+    implementation ("io.grpc:grpc-stub:1.58.0")
+    implementation ("io.grpc:grpc-protobuf:1.58.0")
+    implementation ("io.grpc:grpc-okhttp:1.52.1")
+    implementation ("io.grpc:protoc-gen-grpc-kotlin:1.3.0")
+    implementation ("io.grpc:grpc-kotlin-stub:1.3.0")
+    implementation ("com.google.protobuf:protobuf-kotlin:3.22.0")
+
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
 
@@ -75,4 +81,30 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
+}
+
+protobuf{
+    protoc{
+        artifact = "com.google.protobuf:protoc:3.21.12"
+    }
+    plugins{
+        id("grpc"){
+            artifact = "io.grpc:protoc-gen-grpc-java:1.52.1"
+        }
+        id("grpckt"){
+            artifact = "io.grpc:protoc-gen-grpc-kotlin:1.3.0:jdk8@jar"
+        }
+    }
+    generateProtoTasks{
+        all().forEach{
+            it.plugins{
+                id("grpc")
+                id("grpckt")
+            }
+            it.builtins {
+                id("kotlin")
+                id("java")
+            }
+        }
+    }
 }

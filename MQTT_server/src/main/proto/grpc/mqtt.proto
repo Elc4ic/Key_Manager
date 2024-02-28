@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+package service;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+//Id
+message Id {
+    int32 id = 1;
+}
+//Entity
+message Lock {
+    int32 id = 1;
+    int32 status = 2;
+    int32 control = 3;
+}
+message User {
+    uint64 id = 1;
+    string username = 2;
+    string name = 3;
+    string password = 4;
+    ListRole authorities = 5;
+}
+
+message Role {
+    int32 id = 1;
+    string authorities = 2;
+}
+
+message LoginRequest {
+    string username = 1;
+    string password = 2;
+}
+message RegisterRequest {
+    string username = 1;
+    string password = 2;
+}
+message LoginRespond {
+    User user = 1;
+    string token = 2;
+}
+//Lists
+message ListLock {
+    repeated Lock locks = 1;
+}
+message ListRole {
+    repeated Role roles = 1;
+}
+message ListUser {
+    repeated User users = 1;
+}
+
+//Empty
+message Empty {
+}
+
+//Services +CRUD
+service LockService {
+    rpc GetLockList(Empty) returns (stream Lock);
+    rpc Open(Id) returns (Empty);
+}
+service AuthService {
+    rpc Login (LoginRequest) returns (LoginRespond);
+    rpc Registrate (RegisterRequest) returns (User);
+
+}
+service UserService {
+    rpc GetUser (Empty) returns (User);
+    rpc UpdateUser (User) returns (Empty);
+    rpc DeleteUser (Id) returns (Empty);
+}

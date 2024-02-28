@@ -1,20 +1,30 @@
 package com.example.mqtt_app.model
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import android.util.Log
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
+import com.example.mqtt_app.grpc.GrpcClient
+import service.Mqtt.Lock
 
 class LockViewModel : ViewModel() {
 
-    var lockController001 by mutableStateOf(0)
+    private var _locks: List<Lock> = mutableStateListOf()
+    private val client = GrpcClient()
 
-    fun open(){
-        lockController001 = 1
+    suspend fun getLockList() {
+        val locksTemp = arrayListOf<Lock>()
+        client.getLockList().collect {
+            locksTemp.add(it)
+            Log.w("Debug", "${it.id} ${it.control} ${it.status}")
+        }
+        _locks = locksTemp
+        Log.w("Debug", "$_locks")
     }
 
-    fun close(){
-        lockController001 = 0
+    suspend fun open(id: Int) {
+            client.open(id)
     }
+
+    val locks: List<Lock> get() = _locks
 
 }
