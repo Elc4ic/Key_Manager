@@ -1,6 +1,8 @@
 package org.example.mqtt_server.config;
 
 import org.eclipse.paho.client.mqttv3.*;
+import org.example.mqtt_server.Repository.LockRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -8,6 +10,10 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class MqttConfiguration {
+
+    @Autowired
+    private LockRepository lockRepository;
+
     @Bean
     @ConfigurationProperties(prefix = "mqtt")
     public MqttConnectOptions mqttConnectOptions() {
@@ -20,7 +26,7 @@ public class MqttConfiguration {
 
         IMqttClient mqttClient = new MqttClient("tcp://" + hostname + ":" + port, clientId);
 
-        mqttClient.setCallback(new MqttCustomCallback());
+        mqttClient.setCallback(new MqttCustomCallback(lockRepository));
 
         mqttClient.connect(mqttConnectOptions());
 

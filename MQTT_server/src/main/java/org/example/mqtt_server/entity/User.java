@@ -1,19 +1,23 @@
-package org.example.mqtt_server.Entity;
+package org.example.mqtt_server.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "roles")
+@Table(name = "users")
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Role{
+public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer roleId;
-    private String authority;
-
+    private Long id;
+    @Column(unique = true)
+    private String email;
+    private String name;
 }

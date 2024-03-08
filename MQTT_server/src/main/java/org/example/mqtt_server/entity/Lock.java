@@ -1,4 +1,4 @@
-package org.example.mqtt_server.Entity;
+package org.example.mqtt_server.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

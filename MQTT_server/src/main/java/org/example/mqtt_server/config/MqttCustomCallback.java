@@ -1,17 +1,19 @@
 package org.example.mqtt_server.config;
 
-import lombok.AllArgsConstructor;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.example.mqtt_server.Entity.Lock;
+import org.example.mqtt_server.entity.Lock;
 import org.example.mqtt_server.Repository.LockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class MqttCustomCallback implements MqttCallback {
 
-    @Autowired
     private LockRepository lockRepository;
+
+    public MqttCustomCallback(LockRepository lockRepository) {
+        this.lockRepository = lockRepository;
+    }
 
     public void connectionLost(Throwable cause) {
         System.out.println("The connection is disconnected and can be reconnected");

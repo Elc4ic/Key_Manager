@@ -18,9 +18,9 @@ class LockViewModel : ViewModel() {
 
     suspend fun getLockList() {
         Log.w("Debug", "stream open")
-        if (!openConnect.value){
+        if (!openConnect.value) {
             openConnect.value = true
-            viewModelScope.launch{
+            viewModelScope.launch {
                 client.getLockList().collect {
                     if (it.id == 0) locks.clear()
                     else locks.add(it)

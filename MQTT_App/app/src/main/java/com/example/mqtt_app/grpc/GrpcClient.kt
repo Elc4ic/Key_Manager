@@ -2,7 +2,7 @@ package com.example.mqtt_app.grpc
 
 import com.example.mqtt_app.grpc.Utils.buildEmpty
 import com.example.mqtt_app.grpc.Utils.buildId
-import com.example.mqtt_app.properties.LOCAL_HOST
+import com.example.mqtt_app.properties.HOST
 import com.example.mqtt_app.properties.PORT
 import io.grpc.ManagedChannelBuilder
 import kotlinx.coroutines.flow.Flow
@@ -11,7 +11,7 @@ import service.Mqtt
 
 class GrpcClient {
     private val channel =
-        ManagedChannelBuilder.forAddress(LOCAL_HOST, PORT).usePlaintext().build()
+        ManagedChannelBuilder.forAddress(HOST, PORT).usePlaintext().build()
 
     private val lockStub = LockServiceGrpcKt.LockServiceCoroutineStub(channel)
 

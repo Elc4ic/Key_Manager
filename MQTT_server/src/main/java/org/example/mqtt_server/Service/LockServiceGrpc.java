@@ -3,7 +3,7 @@ package org.example.mqtt_server.Service;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.eclipse.paho.client.mqttv3.MqttException;
-import org.example.mqtt_server.Entity.Lock;
+import org.example.mqtt_server.entity.Lock;
 import org.example.mqtt_server.Repository.LockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
