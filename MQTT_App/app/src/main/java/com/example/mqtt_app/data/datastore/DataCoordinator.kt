@@ -3,6 +3,7 @@ package com.example.mqtt_app.data.datastore
 import android.content.Context
 import android.util.Log
 import androidx.datastore.preferences.preferencesDataStore
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -23,6 +24,7 @@ class DataCoordinator {
         name = USER_PREFERENCES_NAME
     )
 
+    @OptIn(DelicateCoroutinesApi::class)
     fun initialize(context: Context, onLoad: () -> Unit) {
         Log.i(identifier, "initialize")
 

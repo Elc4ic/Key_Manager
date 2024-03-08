@@ -1,11 +1,10 @@
-package org.example.mqtt_server.ServiceGrpc;
+package org.example.mqtt_server.Service;
 
 import io.grpc.stub.StreamObserver;
+import net.devh.boot.grpc.server.service.GrpcService;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.example.mqtt_server.Entity.Lock;
 import org.example.mqtt_server.Repository.LockRepository;
-import org.example.mqtt_server.Service.MqttService;
-import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import service.Mqtt;
@@ -14,10 +13,14 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
-@GRpcService
+@GrpcService
 public class LockServiceGrpc extends service.LockServiceGrpc.LockServiceImplBase {
 
     private final LockRepository lockRepository;
+
+    public LockServiceGrpc(LockRepository lockRepository) {
+        this.lockRepository = lockRepository;
+    }
 
     @Autowired
     private MqttService mqttService;
@@ -25,13 +28,12 @@ public class LockServiceGrpc extends service.LockServiceGrpc.LockServiceImplBase
     @Value("${mqtt.actual}")
     private boolean isActual;
 
-    public LockServiceGrpc(LockRepository lockRepository) {
-        this.lockRepository = lockRepository;
-    }
 
     @Override
     public void getLockList(Mqtt.Empty request, StreamObserver<Mqtt.Lock> responseObserver) {
-        while (true) {
+        isActual = true;
+        int i =0;
+        while (i<20) {
             if (isActual) {
                 responseObserver.onNext(Mqtt.Lock.newBuilder().setId(0).build());
                 List<Lock> locks = lockRepository.findAll();
@@ -47,7 +49,10 @@ public class LockServiceGrpc extends service.LockServiceGrpc.LockServiceImplBase
                 throw new RuntimeException(e);
             }
             System.out.println(isActual);
+            i++;
         }
+        System.out.println("End");
+        responseObserver.onCompleted();
     }
 
     private Mqtt.Lock next(Lock lock) {

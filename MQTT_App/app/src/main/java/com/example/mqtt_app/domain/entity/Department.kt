@@ -9,12 +9,10 @@ data class Department(
 fun departmentItems(): List<Department> {
 
     val departments = arrayListOf<Department>()
-    departments.add(Department("Интернет вещей", R.drawable.ic_launcher_foreground))
-    departments.add(Department("Аэро-космос", R.drawable.ic_launcher_foreground))
-    departments.add(Department("Робототехника", R.drawable.ic_launcher_foreground))
-    departments.add(Department("Подводка", R.drawable.ic_launcher_foreground))
+    departments.add(Department("Пустышка", R.drawable.ic_launcher_foreground))
     departments.add(Department("Мастерская", R.drawable.ic_launcher_foreground))
     departments.add(Department("Склад", R.drawable.ic_launcher_foreground))
+    departments.add(Department("Интернет вещей", R.drawable.ic_launcher_foreground))
 
     return departments
 }

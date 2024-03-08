@@ -39,16 +39,11 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
 
     //grpc
-    implementation("io.grpc:grpc-protobuf:$grpc_version")
-    implementation("io.grpc:grpc-stub:$grpc_version")
     implementation "io.grpc:grpc-netty:${grpc_version}"
-    implementation("io.github.lognet:grpc-spring-boot-starter:4.0.0")
+    implementation("net.devh:grpc-server-spring-boot-starter:${grpc_server_version}") {
+        exclude group: 'io.grpc', module: 'grpc-netty-shaded'
+    }
 
-    //auth
-    implementation("org.mindrot:jbcrypt:0.4")
-    implementation("io.jsonwebtoken:jjwt-api:$jjwtVersion")
-    implementation("io.jsonwebtoken:jjwt-impl:$jjwtVersion")
-    implementation("io.jsonwebtoken:jjwt-jackson:$jjwtVersion")
 }
 
 protobuf {

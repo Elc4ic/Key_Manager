@@ -2,6 +2,7 @@ package com.example.mqtt_app.data.datastore
 
 import android.util.Log
 import androidx.datastore.preferences.core.edit
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.firstOrNull
@@ -13,6 +14,7 @@ suspend fun DataCoordinator.getSampleToken(): String {
         ?: defaultToken
 }
 
+@OptIn(DelicateCoroutinesApi::class)
 fun DataCoordinator.updateSampleToken(value: String) {
     this.sampleToken = value
     GlobalScope.launch(Dispatchers.Default) {

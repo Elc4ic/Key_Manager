@@ -41,7 +41,7 @@ class YandexViewModel(
     fun getJwt(): String {
         return _jwtState.value.toString()
     }
-    fun requestJwt(token: YandexAuthToken) {
+    suspend fun requestJwt(token: YandexAuthToken) {
         viewModelScope.launch(Dispatchers.IO) {
             _progress.emit(true)
             try {
@@ -49,7 +49,6 @@ class YandexViewModel(
                 Log.w("Dubug", jwt[2])
                 Log.w("Dubug", String(Base64.decode(jwt[0], Base64.DEFAULT)))
                 Log.w("Dubug", String(Base64.decode(jwt[1], Base64.DEFAULT)))
-                Log.w("Dubug", String(Base64.decode(jwt[2], Base64.DEFAULT)))
                 _jwtState.emit(jwt[1])
             } catch (e: YandexAuthException) {
                 _jwtState.emit(e.message)

@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -14,6 +14,7 @@ import androidx.navigation.NavController
 import com.example.mqtt_app.data.datastore.DataCoordinator
 import com.example.mqtt_app.data.datastore.getSampleToken
 import com.example.mqtt_app.data.datastore.updateSampleToken
+import com.example.mqtt_app.properties.HOST
 import com.example.mqtt_app.viewModel.YandexViewModel
 import com.yandex.authsdk.YandexAuthLoginOptions
 import com.yandex.authsdk.YandexAuthResult
@@ -31,13 +32,14 @@ fun Login(
         DataCoordinator.shared.updateSampleToken("y0_AgAAAAAzaawiAAtkMAAAAAD9I26OAABqg3Z9DmpGoLR1F6fscKssRUPzaw 31524560")
         tokenText = DataCoordinator.shared.getSampleToken()
     }
-    var count by remember { mutableStateOf(tokenText) }
 
     if (!tokenText.equals("")) {
 
         val yandexToken = tokenText.split(" ")
 
-        viewModel.requestJwt(YandexAuthToken(yandexToken[0], yandexToken[1].toLong()))
+        runBlocking {
+            viewModel.requestJwt(YandexAuthToken(yandexToken[0], yandexToken[1].toLong()))
+        }
         navController.navigate("departs")
     }
 
@@ -57,7 +59,6 @@ fun Login(
         ElevatedButton(onClick = {
             val loginOptions = YandexAuthLoginOptions(LoginType.WEBVIEW)
             launcher.launch(loginOptions)
-        }) { Text(count.toString()) }
+        }) { Text(HOST) }
     }
-
 }
